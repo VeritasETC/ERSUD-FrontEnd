@@ -1,0 +1,230 @@
+.reg-btn1 {
+    border: 1px solid $black;
+    padding: 9px 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 15px;
+    color: $white;
+    // margin-left: 30px;
+    // background-color: black;
+
+    &.small {
+        min-width: 115px;
+        padding: 9px 12px;
+        border-radius: 30px !important;
+    }
+
+    &.dark {
+        background-color:rgba(0, 0, 0, 0.75);
+        width: 119px;
+        height: 40px;
+        line-height: 20px;
+       
+        &.small {
+            background-color: $black;
+
+            &:hover {
+                background-color: $color;
+            }
+        }
+    }
+
+    &.white {
+        background-color: #ffffff;
+        color: $black;
+    }
+
+    &:hover {
+        background-color: $color;
+        color: $white;
+        border-color: $color;
+    }
+}
+
+.reg-btn {
+    border: 1px solid $black;
+    // padding: 9px 15px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 15px;
+    color: $white;
+    // margin-left: 30px;
+    // background-color: black;
+
+    &.small {
+        min-width: 115px;
+        padding: 9px 12px;
+        border-radius: 30px !important;
+    }
+
+    &.dark {
+        background-color:rgba(0, 0, 0, 0.75);        ;
+        width: 119px;
+        height: 40px;
+        @media(max-width:1200px){width: auto;}
+        @media(max-width:991px){min-width: 135.61px;}
+
+        &.small {
+            background-color: $black;
+
+            &:hover {
+                background-color: $color;
+            }
+        }
+    }
+
+    &.white {
+        background-color: transparent;
+        border: 1.23px solid $black;
+        color: $black;
+        min-width: 200px !important;
+        height: 40px !important;
+        font-weight: 700;
+        
+    }
+
+    &:hover {
+        background-color: $color;
+        color: $white;
+        border-color: $color;
+    }
+    @media(max-width:523px) {
+        // border: 1px solid $black;
+        // // padding: 9px 15px;
+        // font-size: 10px;
+        // font-weight: 700;
+        // border-radius: 15px;
+        // color: $white;
+
+        &.small {
+            min-width: 115px;
+            padding: 9px 12px;
+            border-radius: 30px !important;
+        }
+    
+        &.dark {
+            background-color:black;
+            width: 116px;
+            height: 32px;
+    
+            &.small {
+                background-color: $black;
+    
+                &:hover {
+                    background-color: $color;
+                }
+            }
+        }
+    
+        &.white {
+            background-color: #ffffff;
+            color: $black;
+        }
+    
+        &:hover {
+            background-color: $color;
+            color: $white;
+            border-color: $color;
+        }
+    }
+}
+.reg-btn {
+    &.white {
+@media(max-width:1600px) {
+    min-width: 180px !important;
+    font-size: 18px;
+  }
+  @media(max-width:1400px) {
+    min-width: 150px !important;
+    font-size: 18px;
+  }
+
+  @media(max-width:1200px) {
+    min-width: 120px !important;
+    font-size: 14px;
+  }
+
+  @media(max-width:991px) {
+    margin-left: 0;
+    margin-right: 15px ;
+    margin-bottom: 20px;
+  }
+
+  @media(max-width:575px) {
+    min-width: 171.53px !important;
+    font-size: 17px;
+    background: transparent !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+    padding: 6px 12px !important;
+  }}}
+.reg-btn-buy {
+    border: 1px solid $black;
+    padding: 9px 15px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 15px;
+    // color: $white;
+
+    &.small {
+        min-width: 115px;
+        border-radius: 10px;
+        padding: 9px 12px;
+    }
+
+    &.dark {
+        background-color: #393939;
+        height: 40px;
+        border: transparent !important;
+        pointer-events: none;
+
+
+        &.small {
+            background-color: $black;
+
+            &:hover {
+                border: $black;
+            }
+        }
+    }
+
+    // &.white {
+    //     background-color: #ffffff;
+    //     color: $black;
+    // }
+
+    // &:hover {
+    //     background-color: $color;
+    //     color: $white;
+    //     border-color: $color;
+    // }
+}
+
+.disconnet-btn {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.imgbtn{
+    width: 40px;
+    height: 37px;
+}
+
+.btn:disabled, .btn.disabled, fieldset:disabled .btn{
+        border-color: transparent !important;
+}
+
+
+.reg-btn p{
+    -webkit-transition: all .0s ease-in-out;
+    -moz-transition: all .0s ease-in-out;
+    -ms-transition: all .0s ease-in-out;
+    -o-transition: all .0s ease-in-out;
+    transition: all .0s ease-in-out;
+}
+.reg-btn:hover{
+    p{color: $white;}
+}
+

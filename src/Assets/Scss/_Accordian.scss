@@ -1,0 +1,28 @@
+.accordion{background-color: transparent;
+    .accordion-item{background-color: transparent;border:none;
+        border-bottom: 1px solid rgba(255,255,255,0.3);border-radius:0;
+        .accordion-header{background-color: transparent;
+            button{background-color: transparent;border-radius:0;color: $white;font-size: 26px; font-weight: 400;
+                border-radius: 0;border: none;box-shadow: none;padding: 15px 10px;
+                &:after{
+                    background-image: url(../Images/Icons/plus-icon.png);
+                    opacity: 1;background-repeat: no-repeat;
+                }
+                &:not(.collapsed)::after{
+                    background-image: url(../Images/Icons/plus-icon.png);
+                    opacity: 1;background-repeat: no-repeat;
+                    transform: rotate(135deg);
+                
+                }
+                @media(max-width:1600px){font-size: 24px;}
+                @media(max-width:1400px){font-size: 23px;}
+                @media(max-width:1200px){font-size: 22px;}
+                @media(max-width:991px){font-size: 18px;}
+            }
+        }
+        .accordion-body{color: $white;font-size: 20px;border: none;padding: 0 10px 20px;
+            @media(max-width:1200px){font-size: 18px;}
+            @media(max-width:991px){font-size: 16px;}
+        }
+    }
+}

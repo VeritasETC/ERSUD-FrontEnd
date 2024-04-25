@@ -1,0 +1,349 @@
+.tab-cntn {
+    position: relative;
+
+    .hex-img {
+        position: absolute;
+        left: -10px;
+        top: -15px;
+        width: 57px;
+        height: 59px;
+        @media(max-width:575px) {
+            left: 0;
+            top: -5px;
+        }
+    }
+
+    .nav-tabs {
+        justify-content: flex-end;
+        margin-right: 0;
+        border: none;
+        position: relative;
+        z-index: 5;
+
+        .nav-item {
+            margin-left: 0px;
+
+            button {
+                min-width: 115px;
+                border-radius: 10px;
+                padding: 9px 12px;
+                border: none;
+                color: $black;
+                font-weight: 800;
+                font-size: 20px;
+
+                @media(max-width:1600px) {
+                    min-width: 100px;
+                }
+
+                @media(max-width:575px) {
+                    min-width: unset;
+                    font-size: 16px
+                }
+
+                &:hover,
+                &.active {
+                    background-color: $black;
+                    color: $white;
+                }
+            }
+        }
+    }
+}
+
+// Buy Panel
+.buyerusd-pnl {
+    position: relative;
+    display: inline-block;
+    width: 470px;
+    max-width: 100%;
+    padding: 30px 30px 30px;
+    border-radius: 45px;
+    background: #F1F1F1;
+    border: 1.69px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 18.582170486450195px 7.601796627044678px rgba(0, 0, 0, 0.15) inset;
+
+    @media(max-width:1600px) {
+        width: 450px;
+    }
+
+    @media(max-width:1400px) {
+        width: 420px;
+    }
+
+    @media(max-width:991px) {
+        margin: 50px auto 0;
+    }
+    @media(max-width:767px) {
+        padding: 30px 30px 10px;
+        text-align: center;
+    }
+    @media(max-width:575px) {
+        padding: 20px 15px 0px;
+        text-align: center;
+    }
+
+    span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 140px;
+        opacity: 1;
+        z-index: 1;
+
+        @media(max-width:767px) {
+            width: 100px;
+        }
+        @media(max-width:575px) {
+            width: 70px;
+        }
+
+        &:first-child {
+            top: calc(50% - 78px);
+            left: -80px;
+            @media(max-width:767px) {
+                left:-30px ;
+                bottom: -50px;
+                top: unset;   
+                transform: rotateZ(-35deg);
+            }
+            @media(max-width:575px) {
+                left: -12px;
+                bottom: -20px;
+            }
+           
+        }
+
+        &:nth-child(2) {
+            top: -70px;
+            right: -70px;
+            left: unset;
+            @media(max-width:767px) {
+                top: -50px;
+                right:-50px ;   
+            }
+            @media(max-width:575px) {
+                right: -13px;
+                top: -35px;
+            }
+        }
+
+        &:nth-child(3) {
+            bottom: -30px;
+            right: -50px;
+            left: unset;
+            top: unset;
+            z-index: 1;
+            @media(max-width:767px) {
+                right: -30px;
+            }
+            @media(max-width:575px) {
+                right: -12px;
+                bottom: -20px;
+            }
+        }
+    }
+
+    .sell-btn-sntnr {
+        display: flex;
+        align-items: center;
+
+        @media(max-width:575px) {
+            justify-content: center;
+            margin: 10px auto;
+        }
+    }
+
+    h4 {
+        font-size: 18px;
+        color: $white;
+        font-weight: 400;
+        display: inline-block;
+        padding: 7.5px 21.6px;
+        background-color: rgba(0, 0, 0, 0.40);
+        border-radius: 12px;
+        line-height: unset;
+
+        &.small {
+            padding: 7.5px 20px 7.5px 5px;
+            @media(max-width:575px) {display: inline-flex;
+                align-items: center;justify-content: space-between;
+                font-size: 16px;min-width: 134.53px;
+            }
+        }
+        &.big {
+            min-width: 171px;
+            @media(max-width:575px) {
+                min-width: 134.53px;padding: 7.5px 5px;font-size: 16px;text-align: left;
+            }
+        }
+
+        img {
+            background-color: $white;
+            border-radius: 50%;
+            padding: 0 1.5px;
+            margin-right: 7.5px;
+            height: 40px;
+        }
+
+        @media(max-width:1600px) {
+            font-size: 18px;
+        }
+        @media(max-width:1511px) {
+            font-size: 15px;
+        }
+    }
+
+    h5 {
+        font-weight: 700;
+        font-size: 34px;
+
+        @media(max-width:1600px) {
+            font-size: 30px;
+        }
+
+        @media(max-width:575px) {
+            font-size: 28px;
+        }
+    }
+
+    .erusd-field {
+        border: none;
+        background-color: transparent;
+        font-size: 34px;
+        width: 50%;
+        text-align: right;
+        height: 40px;
+        font-weight: 700;
+        color: $black;
+        position: relative;
+        top: -5px;
+        caret-color: #707070;
+        
+        caret-width: 10px !important; 
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .erusd-field::placeholder {
+        color: $black !important;
+        font-weight: 700;
+        font-size: 34px;
+        opacity: 1;
+    }
+
+    h6 {
+        margin-right: 10px;
+        font-weight: 800;
+        font-size: 20px;
+
+        @media(max-width:575px) {
+            font-size: 18px;
+        }
+    }
+
+    p {
+        font-size: 18px;
+        
+
+        @media(max-width:1600px) {
+            font-size: 16px;
+        }
+
+        @media(max-width:575px) {
+            font-size: 16px;
+        }
+
+        &.error-text {
+            text-align: center;
+            color: red;
+            margin: 0;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    }
+
+    .reg-btn {
+        text-align: center;
+        &:active,
+        &:disabled{
+            background-color: black !important;
+        }
+        &.small {
+            position: relative;
+            z-index: 2;
+        }
+    }
+    .reg-btn1 {
+        text-align: center;
+
+        &.small {
+            position: relative;
+            z-index: 2;
+        }
+    }
+}
+.payable{
+     max-width: 300px;
+    margin: 0 auto;;
+}
+.info{
+    position: absolute;
+    right: 0;
+    top: 0;
+    @media(max-width:575px){right: -10px;top:-4px}
+    title{background-color: #f00;}
+    .inner-info{position: relative;
+        &:hover{
+            .title-info{z-index: 5;padding: 10px 5px; left: 34px; font-size: 14px;display: inline-block;
+                @media(max-width:767px){right: 0;left:unset}
+
+            }
+        }
+    }
+    .title-info{
+        position: absolute;
+    left: 0;
+    top: -20px;
+    width: 200px;
+     display: none;
+    background-color: rgba(255,255,255,0.5);
+    color: black;
+    border-radius: 5px;
+    border: 1px solid grey;
+    text-align: center;
+    @media(max-width:767px){right: 0;left:unset;
+        background-color: rgba(255,255,255,1);
+        font-size: 12px;top:-60px;
+    }
+    }
+}
+.EtcBalance{
+    position: relative;
+}
+// Buy Panel
+.static-spans {
+    span {
+        position: static !important;
+        margin-left: 120px;
+    }
+}
+.statics-spans {
+    span {
+        position: static !important;
+    }
+}
+
+.wallet-tag {
+    font-size: 15px;
+}
+
+.ethbalance {
+    color: "black";
+    font-size: "15px";
+}
+.btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show{
+    background-color: rgba(0, 0, 0, 0.75);
+}

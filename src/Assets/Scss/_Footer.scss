@@ -1,0 +1,67 @@
+.footer{padding-top: 40px;padding-bottom: 15px;background-color: rgba(0,0,0,0.8);
+    @media(max-width:767px){padding-bottom: 20px;}
+    ul{margin-bottom: 30px;margin-top:20px;
+        @media(max-width:575px){margin-top: 10px;margin-bottom:15px;}
+        li{display: inline-block;
+            a{font-size: 20px;margin: 0 20px;color:$grba;font-weight: 700;
+                @media(max-width:1600px){font-size: 19px;
+                    img{max-width: 30px;}
+                }
+                @media(max-width:1200px){font-size: 18px;}
+                @media(max-width:991px){font-size: 16px;}
+                @media(max-width:767px){font-size: 18px;}
+                @media(max-width:575px){font-size: 16px;margin:0 10px;
+                    img{max-width: 25px;}
+                }
+                &:focus{color: $white;}
+                &.active,&:hover{color: $color;}
+            }
+        }
+        &.footer-list{margin-top:20px;margin-bottom:0;
+            li{
+                a{margin: 0 25px;
+                    @media(max-width:991px){margin: 0 20px;}
+                    @media(max-width:767px){margin: 0 16px;}
+                    @media(max-width:575px){font-size: 16px;margin:0 12px 10px;}
+                }
+            }
+        }
+        &.footer-social-list{
+            li{
+                a{opacity: 0.8;
+                    &:hover{opacity: 1;}
+                }
+            }
+        }
+    }  
+    p{color: $grba;font-weight: 700;font-size: 20px;
+        @media(max-width:1600px){font-size: 19px;}
+        @media(max-width:1200px){font-size: 18px;}
+        @media(max-width:991px){font-size: 16px;}
+        @media(max-width:767px){font-size: 18px;}
+        @media(max-width:575px){font-size: 16px;}
+    }   
+    .dropdown{
+        button{
+            background-color: transparent;border: none;font-size: 20px;color:$grba;font-weight: 700;
+            @media(max-width:1600px){font-size: 19px;}
+            @media(max-width:1200px){font-size: 18px;}
+            @media(max-width:991px){font-size: 16px;}
+            @media(max-width:767px){font-size: 18px;}
+            @media(max-width:575px){font-size: 16px;}
+            i{color: $white;font-size: 24px;}
+            &:after{display: none;}
+            &.show,
+            &:hover{color: $color;
+                i{color: $color;}
+            }
+        }
+        .dropdown-menu{padding: 0;background-color: $grba;
+            a{background-color: $grba;color:$black;font-size:18px;
+                &:first-child{border-radius: 4px 4px 0 0;}
+                &:last-child{border-radius: 0 0 4px 4px;}
+                &:hover{background-color: $color;color: $white;}
+            }
+        }
+    }
+}

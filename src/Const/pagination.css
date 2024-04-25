@@ -1,0 +1,64 @@
+.pagination_2 {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    button {
+      color: white;
+    }
+  }
+  
+
+  button.ellipsis {
+    margin: 0 2px;
+     pointer-events: none;
+  }
+  button.last {
+    margin-left: 2px;
+  }
+  .pg-btn{
+     /* opacity: .6; */
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     border: none;
+     min-width: 26px;
+     height: 26px;
+     background-color: #4BBB93;
+     margin-left: 5px;
+     border-radius: 6px;
+     font-size: 16px;
+     cursor: pointer;
+  }
+
+  .mainbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 30px;
+    height: 26px;
+    background-color: #4BBB93;
+    margin-left: 5px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 30px;
+    border: transparent;
+  }
+  .active2  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 30px;
+    height: 26px;
+    background-color: #4BBB93;
+    margin-left: 5px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 30px;
+    border: transparent;
+    color: #FFFFFF;
+  }
