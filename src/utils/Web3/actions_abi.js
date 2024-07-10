@@ -69,7 +69,7 @@ export const contract_api =
   },
   {
     "inputs": [],
-    "name": "ERUSDJoin",
+    "name": "APYFactory",
     "outputs": [
       {
         "internalType": "address",
@@ -81,44 +81,29 @@ export const contract_api =
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "APYMapper",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_destionation",
+        "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
       }
     ],
-    "name": "EmergencyWithdrawCurrency",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "ERUSDJoin",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_tokenaddress",
+        "name": "",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_beneficiary",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
       }
     ],
-    "name": "EmergencyWithdrawToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -199,6 +184,25 @@ export const contract_api =
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_userAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getUserTotalAPY",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_tokenAmount",
         "type": "uint256"
@@ -264,6 +268,32 @@ export const contract_api =
     "inputs": [
       {
         "internalType": "address",
+        "name": "_APYFactory",
+        "type": "address"
+      }
+    ],
+    "name": "setAPYFactory",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_apyMapper",
+        "type": "address"
+      }
+    ],
+    "name": "setAPYMapper",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_oracleAddress",
         "type": "address"
       }
@@ -313,6 +343,24 @@ export const contract_api =
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_apyPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_daySeconds",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateAPY",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "vaultContract",
     "outputs": [
@@ -353,6 +401,19 @@ export const contract_api =
       }
     ],
     "name": "withdrawCollectedFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_apyContract",
+        "type": "address"
+      }
+    ],
+    "name": "withdrawSingleAPYAmount",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

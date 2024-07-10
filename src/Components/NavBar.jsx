@@ -23,6 +23,7 @@ import {
   ChainIds,
   oraclePrice,
   getRate,
+  DocFile,
 } from "../Const/const";
 import { Telegram } from "../Const/const";
 import { Twitter } from "../Const/const";
@@ -59,12 +60,12 @@ function NavBar({ scrollToFaq, scrollToDis, scrollToWork, ethAmount }) {
     }
   }, [address, isWrongBlockcahin, switchNetwork]);
   const onButtonClick = () => {
-    const pdfUrl = "ERUSD_Whitepaper_1.0.pdf";
+    const pdfUrl = "ERUSD_Whitepaper.pdf";
 
     // Download the PDF
     const link = document.createElement("a");
     link.href = pdfUrl;
-    link.download = "ERUSD_Whitepaper_1.0.pdf"; // specify the filename
+    link.download = DocFile;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -90,6 +91,7 @@ function NavBar({ scrollToFaq, scrollToDis, scrollToWork, ethAmount }) {
   useEffect(() => {
     setCollapseOpen(false);
   }, []);
+ 
   return (
     <>
       <Navbar
@@ -217,6 +219,7 @@ function NavBar({ scrollToFaq, scrollToDis, scrollToWork, ethAmount }) {
                   />
                 </>
               )}
+
             </div>
             <div className="line"></div>
             <div className="etc-amount">

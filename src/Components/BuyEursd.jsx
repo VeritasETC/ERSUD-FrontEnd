@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Tab, Tabs, Spinner, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { FaCopy } from "react-icons/fa";
+import { FaCopy, FaWallet } from "react-icons/fa";
 import coin1 from "../Assets/Images/Token_01.png";
 import coin2 from "../Assets/Images/Token_02.png";
 import coin3 from "../Assets/Images/Token_03.png";
@@ -15,9 +15,9 @@ import Toast, { NotificationTypes, showNotification } from "../utils/Toast/toast
 import Web3 from "web3";
 import { contract_api } from "../utils/Web3/actions_abi";
 import validator from "validator";
-import addresses, { contractAddress, APYContract, getRate, colletralratiovalue, PRECISION, SOME_VALUE } from "../Const/const";
+import addresses, { contractAddress, APYContract, getRate, colletralratiovalue, PRECISION, SOME_VALUE, SOME_VALUES, copyIconSVG } from "../Const/const";
 import { BigNumber } from 'bignumber.js';
-import { DEFAULT_COLLATERAL, ETC_AMOUNT } from "../utils/Web3/metamask";
+import { DEFAULT_COLLATERAL, ETC_AMOUNT, LatestAPYFee, UserAPY_CALCULATE, getbalanceOfERUSD } from "../utils/Web3/metamask";
 
 
 import {
@@ -45,6 +45,7 @@ import {
   useNetwork,
   useNetworkMismatch,
 } from "@thirdweb-dev/react";
+import { toast } from "react-toastify";
 
 
 
@@ -82,6 +83,8 @@ function BuyEursd({
   const [Etcbalance, setEtcbalance] = useState("");
 
   const [apyAmount, setapyAmount] = useState(0);
+  const [FinalEtc, setFinalEtc] = useState(0);
+
   const chainId = useChainId();
   const isWrongBlockcahin = useNetworkMismatch();
   const [, switchNetwork] = useNetwork();
@@ -94,7 +97,7 @@ function BuyEursd({
 
   const address= useAddress()
   useEffect(()=>{
-  },[ethAmount])
+  },[ethAmount,apyAmount])
   //                            Copy Address
   const handleCopyClick = () => {
     const addressText = address;
@@ -110,16 +113,27 @@ function BuyEursd({
       }, 2000);
     }
   };
+  const handleCopyClickErusd = () => {
+    const addressText = addresses.ERUSDToken;
+
+    if (addressText) {
+      navigator.clipboard.writeText(addressText);
+      setCopied(true);
+      showNotification("ERUSD Token Address Copied",NotificationTypes.SUCCESS);
+
+      // Reset copied state after a short delay
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }
+  };
   //                            Input ERUSD
-  useEffect(() => {
-    APY_CALCULATE_VALUE()
-  },)
-  const APY_CALCULATE_VALUE = () => {
+  
+  const APY_CALCULATE_VALUEUser = () => {
     try {
-      const web3 = new Web3(window.ethereum)
-      APY_CALCULATE(addresses.APYContract, address).then((x) => {
+      UserAPY_CALCULATE(addresses.contractAddress, address).then((x) => {
         if (x) {
-          const apyResult = parseInt(x[0]?._hex, 16);
+          const apyResult = parseInt(x?._hex, 16);
           const finalapyResult = apyResult / 10 ** 18;
           setapyAmount(finalapyResult)
         }
@@ -128,6 +142,9 @@ function BuyEursd({
     } catch (error) {
     }
   };
+  useEffect(() => {
+    APY_CALCULATE_VALUEUser()
+  },[apyAmount,address])
 
   const handleErusdChange = async (e) => {
     if (!ethAmount) {
@@ -165,9 +182,6 @@ function BuyEursd({
      const respone = await getRate()
 
 
-
-    
-
       const value=input*colletral/100
 
 const ethe= (value / ethAmount);
@@ -175,7 +189,6 @@ const finalresult = (ethe *stabilityfee)
 const lastresult = finalresult/100
 const result = lastresult+SOME_VALUE
       const SumofErusd =   (result+ethe);
-
       if (ethAmount) {
         setethResult(ethe);
         setErusdfee(result);
@@ -187,32 +200,31 @@ const result = lastresult+SOME_VALUE
     } catch (error) { }
     // }
   };
-  useEffect(() => {
-    if (!ethAmount || !erusd) {
-      return;
-    }
+//   useEffect(() => {
+//     if (!ethAmount || !erusd) {
+//       return;
+//     }
 
-    try {
-      const web3 = new Web3(window.ethereum);
-      const value=(erusd*colletral)/100
+//     try {
+//       const web3 = new Web3(window.ethereum);
+//       const value=(erusd*colletral)/100
 
-      const ethe= (value / ethAmount);
-      const finalresult = (ethe * stabilityfee)
-      // console.log("dffd",stabilityfee)
-      const lastresult = finalresult/100
-      const result = lastresult+SOME_VALUE
-            const SumofErusd =  (result+ethe);
-// 
+//       const ethe= (value / ethAmount);
+//       const finalresult = (ethe * stabilityfee)
+//       const lastresult = finalresult/100
+//       const result = lastresult+SOME_VALUE
+//             const SumofErusd =  (result+ethe);
+// // 
   
-      setethResult(ethe);
-      setErusdfee(result);
-      setSumErusd(SumofErusd);
-      setBuyErusd(erusd);
-      setEtcbalance(ethAmount)
-    } catch (error) {
-      // Handle error
-    }
-  }, [ethAmount, stabilityfee, colletral, erusd]);
+//       setethResult(ethe);
+//       setErusdfee(result);
+//       setSumErusd(SumofErusd);
+//       setBuyErusd(erusd);
+//       setEtcbalance(ethAmount)
+//     } catch (error) {
+//       // Handle error
+//     }
+//   }, [ethAmount, stabilityfee, colletral, erusd,erusdFee]);
   //                            Input Colletral
   const handleColletralChange = async (e) => {
     const input = e.target.value; // Only allow numbers, plus, and minus signs
@@ -264,14 +276,17 @@ const result = lastresult+SOME_VALUE
         try {
             const web3 = new Web3(window.ethereum);
             const result = await DEFAULT_COLLATERAL(addresses.vault, address);
-
             if (result) {
                 const decimalResult = parseInt(result?._hex, 16);
 
                 const EthResult = decimalResult / 10 ** 18;
-                const percentAnnualFee= EthResult/ethAmount
-                const finalResults =percentAnnualFee+apyAmount
+
+                // const percentAnnualFee= EthResult/ethAmount
+                const finalResults =EthResult+apyAmount
                 setAnualFeeErusd(finalResults);
+                setFinalEtc(EthResult)
+                // console.log("object",EthResult,finalResults,apyAmount)
+
 
             }
         } catch (error) {
@@ -285,6 +300,7 @@ const result = lastresult+SOME_VALUE
       if (!address || chainId !== ChainIds) {
         setbalance("");
         setSellErusd('');
+        setapyAmount(0)
         return;
       }
   
@@ -329,13 +345,13 @@ const result = lastresult+SOME_VALUE
         );
         // Successful transaction
         showNotification("Transaction has been confirmed", NotificationTypes.SUCCESS);
-        // State updates and other actions
+        setErusdfee('');
         setSumErusd('');
         setethResult('');
-        setErusdfee('');
         setErusd('');
         setBuyErusd('');
         GetBalance(address);
+        APY_CALCULATE_VALUEUser()
         fetchData();
         EthAssest();
     } catch (error) {
@@ -368,7 +384,7 @@ const result = lastresult+SOME_VALUE
       setSellErusd('')
       return;
   }
-    getbalanceOf(addresses.ERUSDToken, address)
+  getbalanceOfERUSD(addresses.vault, address)
       .then((x) => {
         const decimalResult = parseInt(x?._hex, 16);
         const EthResult = decimalResult / 10 ** 18;
@@ -397,6 +413,7 @@ const result = lastresult+SOME_VALUE
       .then(() => {
         showNotification("Transaction has been confirmed", NotificationTypes.SUCCESS);
         setSellErusd('');
+        setFinalEtc('0.000000')
         setAnualFeeErusd("");   
         GetBalance(address);
         EthAssest()
@@ -422,6 +439,16 @@ const result = lastresult+SOME_VALUE
       })
       .catch((err) => { });
   };
+  const LatesApyDeatil = async () => {
+    LatestAPYFee(addresses.APYContract)
+      .then((x) => {
+        const decimalResult = parseInt(x[1]?._hex, 16);
+        const EthResult = decimalResult / 10 ** 18;
+        setSellErusdfee(EthResult * 365);
+      })
+      .catch((err) => { });
+  };
+
   //                           Set Satability Fee
   useEffect(() => {
     const web3 = new Web3(window.ethereum);
@@ -465,9 +492,11 @@ const result = lastresult+SOME_VALUE
 
   //                             Set APYFee of contractAddress
   useEffect(() => {
-    Apyfee();
+    LatesApyDeatil()
+    // Apyfee();
   }, [address]);
   const resetStates = () => {
+    setFinalEtc(0)
     setSellErusd('');
     setbalanceErr('');
     setSellErusdErr('');
@@ -485,7 +514,7 @@ const result = lastresult+SOME_VALUE
     if (!balanceOf || balanceOf === "0" || balanceOf === "0." || !address ||chainId != ChainIds) {
       resetStates();
     }
-  }, [balanceOf, address,chainId]);
+  }, [balanceOf, address,chainId,FinalEtc]);
   
 
   const initialTab = localStorage.getItem("activeTab") || "UseErusd";
@@ -502,6 +531,29 @@ const result = lastresult+SOME_VALUE
       setIsButtonDisabled(false);
     }
   }, [balance, SumErusd]);
+ 
+  const addTokenToMetamask = async () => {
+    try {
+      if (window.ethereum) {
+        await window.ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: addresses?.ERUSDToken, 
+              symbol: "tERUSD",
+              decimals: 18, 
+              image: "TOKEN_IMAGE_URL", 
+            },
+          },
+        });
+      } else {
+        showNotification("MetaMask or Ethereum not detected.",NotificationTypes.ERROR);
+      }
+    } catch (error) {
+    }
+  };
+  
 
   return (
     <>
@@ -556,10 +608,13 @@ const result = lastresult+SOME_VALUE
               <hr></hr>
               <div className="spacer-30"></div>
               <div className="flex-div align-items-center">
-                <h4 className="small">
+                <h4 className="small"onClick={addTokenToMetamask}>
                   <img src={svg} alt="hexagone" /> 
                   
-                  ERUSD
+                  ERUSD  
+                  <FaWallet className="icon" />
+
+
                 </h4>
                 <input
                 disabled={spin} 
@@ -635,7 +690,7 @@ const result = lastresult+SOME_VALUE
                 
                 
                
-                {(balance < SumErusd) && <p style={{ color: "red" }}>Insuffient balance</p>}
+                {(balance < SumErusd) && <p style={{ color: "red" }}>Insufficient balance</p>}
 
                 {
                   spin ? (
@@ -692,8 +747,9 @@ const result = lastresult+SOME_VALUE
               <hr></hr>
               <div className="spacer-30"></div>
               <div className="flex-div align-items-center">
-                <h4 className="small">
+                <h4 className="small" onClick={addTokenToMetamask}>
                   <img src={svg} alt="hexagone" /> ERUSD
+                  <FaWallet className="icon" />
                 </h4>
                 <input
                   type="text"
@@ -718,14 +774,37 @@ const result = lastresult+SOME_VALUE
 
               </div>
               {sellerusdErr && <p className="err-msg">{sellerusdErr}</p>}
-              {/* <div className="spacer-20"></div> */}
+              <div className="spacer-20"></div>
               <hr className="mb-3"></hr>
               <div className="flex-div">
-                <p className="mb-3">
+                <p className="mb-2">
                   <b>APY:</b>
                 </p>
-                <p className="mb-3">
+                <p className="mb-2">
                   <b>{SellerusdFee ? `${SellerusdFee}%` : "0"} </b>
+                </p>
+              </div>
+
+              <div className="flex-div">
+                <p className="mb-2">
+                  <b>APY Amount:</b>
+                </p>
+                <p className="mb-2">
+                  <b>
+                  {apyAmount ? parseFloat(apyAmount).toFixed(6) : SOME_VALUES}
+                  </b>
+                </p>
+              </div>
+              <div className="flex-div">
+                <p className="mb-2">
+                  <b>ETC Amount:</b>
+                </p>
+                <p className="mb-2">
+                  <b>
+                    
+                  {FinalEtc ? parseFloat(FinalEtc).toFixed(6) : "0.00"}
+
+                  </b>
                 </p>
               </div>
               <hr></hr>
@@ -734,7 +813,7 @@ const result = lastresult+SOME_VALUE
                   balanceErr ? (
                     <p style={{ color: "red" }}>{balanceErr}</p>
                   ) : (
-                    <p>You will Get {(parseFloat(AnualFeeErusd).toFixed(4) !== 'NaN' ? parseFloat(AnualFeeErusd).toFixed(4) : '0.0000')} ETC</p>
+                    <p>You will Get {(parseFloat(AnualFeeErusd).toFixed(6) !== 'NaN' ? parseFloat(AnualFeeErusd).toFixed(6) : '0.0000')} ETC</p>
 
                   )
                 }

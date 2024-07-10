@@ -10,6 +10,26 @@ export const liquidation_abi = [
                 "internalType": "address",
                 "name": "_oracleAddress",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_masterWallet",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_erusdContract",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_ethJoinContract",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_APYMapper",
+                "type": "address"
             }
         ],
         "stateMutability": "nonpayable",
@@ -39,44 +59,66 @@ export const liquidation_abi = [
         "type": "fallback"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "APYMapper",
+        "outputs": [
             {
                 "internalType": "address",
-                "name": "_destionation",
+                "name": "",
                 "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_amount",
-                "type": "uint256"
             }
         ],
-        "name": "EmergencyWithdrawCurrency",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "erusdContract",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethJoinContract",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_tokenaddress",
+                "name": "_userAddress",
                 "type": "address"
-            },
+            }
+        ],
+        "name": "getLiquidationDetail",
+        "outputs": [
             {
-                "internalType": "address",
-                "name": "_beneficiary",
-                "type": "address"
+                "internalType": "uint256",
+                "name": "_userCollateral",
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "_masterWalletFee",
                 "type": "uint256"
             }
         ],
-        "name": "EmergencyWithdrawToken",
-        "outputs": [],
-        "stateMutability": "nonpayable",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -91,16 +133,63 @@ export const liquidation_abi = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_currenPercentage",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_nextLiqPercent",
+                "name": "_currentPercentage",
                 "type": "uint256"
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getLiquidityLimit",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getSystemHealth",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "_health",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "incentiveFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_userAddress",
+                "type": "address"
+            }
+        ],
+        "name": "liquidateWithSwap",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -111,6 +200,19 @@ export const liquidation_abi = [
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "masterWallet",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -153,11 +255,37 @@ export const liquidation_abi = [
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "_fee",
+                "type": "uint256"
+            }
+        ],
+        "name": "setIncentiveFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "_liqPercent",
                 "type": "uint256"
             }
         ],
         "name": "setLiquidationPenalty",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_masterWallet",
+                "type": "address"
+            }
+        ],
+        "name": "setMasterWallet",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -173,6 +301,45 @@ export const liquidation_abi = [
         "name": "setOracleContract",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_swapContract",
+                "type": "address"
+            }
+        ],
+        "name": "setSwapContract",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_vaultContract",
+                "type": "address"
+            }
+        ],
+        "name": "setVaultContract",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "swapContract",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

@@ -87,7 +87,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 140px;
+        width: 132px;
         opacity: 1;
         z-index: 1;
 
@@ -165,10 +165,11 @@
         line-height: unset;
 
         &.small {
-            padding: 7.5px 20px 7.5px 5px;
+            padding: 7.5px 20px 7.5px 5px; cursor: pointer;
             @media(max-width:575px) {display: inline-flex;
                 align-items: center;justify-content: space-between;
                 font-size: 16px;min-width: 134.53px;
+                
             }
         }
         &.big {
@@ -346,4 +347,36 @@
 }
 .btn-check:checked + .btn, :not(.btn-check) + .btn:active, .btn:first-child:active, .btn.active, .btn.show{
     background-color: rgba(0, 0, 0, 0.75);
+}
+
+.info{
+    position: absolute;
+    right: 0;
+    top: 0;
+    @media(max-width:575px){right: -10px;top:-4px}
+    title{background-color: #f00;}
+    .inner-info{position: relative;
+        &:hover{
+            .title-info-bar{z-index: 5;padding: 10px 5px; left: 34px; font-size: 14px;display: inline-block;top: 33px;
+                @media(max-width:767px){right: 31px;left:unset ;top:6px}
+
+            }
+        }
+    }
+    .title-info-bar{
+        position: absolute;
+    left: 0;
+    top: -20px;
+    width: 200px;
+     display: none;
+    background-color: rgba(255,255,255,0.5);
+    color: black;
+    border-radius: 5px;
+    border: 1px solid grey;
+    text-align: center;
+    @media(max-width:767px){right: 0;left:unset;
+        background-color: rgba(255,255,255,1);
+        font-size: 12px;top:-60px;
+    }
+    }
 }

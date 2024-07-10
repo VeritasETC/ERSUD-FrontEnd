@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 import userbg from "../Assets/Images/BG/bg-half-home.png";
 import loader from "../Assets/Images/Dual_Ring-1.2s-177px.gif";
 import BuyEursd from "../Components/BuyEursd";
+import info from "../Assets/Images/Groupinfo.svg";
 import addresses, { APYContract, TransactionHistory, contractAddress, minutesToMilliseconds, vault } from "../Const/const";
-import { APYFee, APY_CALCULATE, DEFAULT_COLLATERAL, WITHDRAW_APY_AMOUNT, erusdAssest, transactionhistorylenght } from "../utils/Web3/metamask";
+import { APYFee, APY_CALCULATE, DEFAULT_COLLATERAL, LatestAPYFee, UserAPY_CALCULATE, WITHDRAW_APY_AMOUNT, erusdAssest, getliquidationPenalty, minCollateralRatio, transactionhistorylenght } from "../utils/Web3/metamask";
 import Pagination from "../Const/pagination";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Web3 from "web3";
@@ -35,6 +36,7 @@ function MyAssets({
   const [percentagebar, setpercentagebar] = useState(0);
   const [percentagelenght, setpercentagelenght] = useState(0);
   const [usererusdAmount, setusererusdAmount] = useState(0);
+  const [minCollateralRatioAmount, setminCollateralRatioAmount] = useState(0);
   // const [defaultColletral, setdefaultColletral] = useState(null);
   const [apyAmount, setapyAmount] = useState(0);
   const [SellerusdFee, setSellErusdfee] = useState(0);
@@ -80,27 +82,27 @@ function MyAssets({
   };
 
 
-
   useEffect(() => {
     // Initial call
-    APY_CALCULATE_VALUE();
+    APY_CALCULATE_VALUEUser();
 
     // Set interval to update every minute
     const interval = setInterval(() => {
-      APY_CALCULATE_VALUE();
+      APY_CALCULATE_VALUEUser();
     }, minutesToMilliseconds); // 1 minute
 
     return () => clearInterval(interval);
-  }, [address, colletral]);
+  }, [address, colletral,apyAmount]);
 
 
 
-  const APY_CALCULATE_VALUE = () => {
+
+  const APY_CALCULATE_VALUEUser = () => {
     try {
       const web3 = new Web3(window.ethereum)
-      APY_CALCULATE(addresses.APYContract, address).then((x) => {
+      UserAPY_CALCULATE(addresses.contractAddress, address).then((x) => {
         if (x) {
-          const apyResult = parseInt(x[0]?._hex, 16);
+          const apyResult = parseInt(x?._hex, 16);
           const finalapyResult = apyResult / 10 ** 18;
           setapyAmount(finalapyResult)
         }
@@ -111,7 +113,35 @@ function MyAssets({
   };
 
 
+  
+  const GetMiniColletrlratio = async() => {
+    try {
+      const result = await  minCollateralRatio(addresses.contractAddress)
+      const apyResult = parseInt(result?._hex, 16);
+      const rate = await getliquidationPenalty()
+      const apyResulttext = parseInt(rate?._hex, 16);
+     const finalresult = apyResult-apyResulttext
+      setminCollateralRatioAmount(finalresult)
+    }
+    catch(err) {
+    }
+  }
+  useEffect(() => {
+    if (!address) {
+      setminCollateralRatioAmount(0);
+    }
+  }, [address]);
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (address) {
+        GetMiniColletrlratio();
+      }
+    }, 5000); // 5000 milliseconds = 5 seconds
 
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [address]); 
   const APY_WITHDRAW = async () => {
     if (apyAmount <= 0) { // Check if apyAmount is zero or less than zero
       showNotification( "You have no APY",NotificationTypes.ERROR)
@@ -129,7 +159,7 @@ function MyAssets({
       
       const interval = setInterval(async () => {
         try {
-          await APY_CALCULATE_VALUE();
+          await APY_CALCULATE_VALUEUser();
           
           if (apyAmount !== previousAmount) {
             clearInterval(interval);
@@ -157,12 +187,13 @@ function MyAssets({
     // showbarcal()
     if (address) {
 
-      Apyfee()
+      // Apyfee()
+      LatesApyDeatil()
     }
     else {
       setpercentagebar(0)
     }
-  }, [colletral, colletrallimit, usererusdAmount, address])
+  }, [colletral, minCollateralRatioAmount, usererusdAmount, address])
 
 
   useEffect(() => {
@@ -171,17 +202,17 @@ function MyAssets({
     }, 3000);
 
     return () => clearInterval(interval); 
-  }, [colletral, colletrallimit]);
+  }, [colletral, minCollateralRatioAmount]);
 
 
   const showbarcal = () => {
-    const distance = Math.abs(colletral - colletrallimit);
-    const maxDistance = Math.abs(CONSTANT_COLLATERAL - colletrallimit);
+    const distance = Math.abs(colletral - minCollateralRatioAmount);
+    const maxDistance = Math.abs(CONSTANT_COLLATERAL - minCollateralRatioAmount);
     let progressPercentage;
     if (colletral == 0) {
       progressPercentage = 0;
     }
-    else if (colletral < colletrallimit && colletrallimit && colletral) {
+    else if (colletral < minCollateralRatioAmount && minCollateralRatioAmount && colletral) {
       progressPercentage = 100;
     } else if (colletral >= 150) {
       progressPercentage = 0;
@@ -205,7 +236,15 @@ function MyAssets({
       .catch((err) => { });
   };
 
-
+  const LatesApyDeatil = async () => {
+    LatestAPYFee(addresses.APYContract)
+      .then((x) => {
+        const decimalResult = parseInt(x[1]?._hex, 16);
+        const EthResult = decimalResult / 10 ** 18;
+        setSellErusdfee(EthResult * 365);
+      })
+      .catch((err) => { });
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -281,21 +320,34 @@ function MyAssets({
                     style={{ backgroundImage: `url(${userbg})` }}
                   ></div>
                   <span>
-                    Liq Limit: <t>{colletrallimit}%</t>
+                    Liq Limit: <t>{minCollateralRatioAmount}%</t>
                   </span>
-                  <h1>{colletral ?? "0"}%</h1>
-                  <p>Collateral Ratio</p>
+                  <h1>{colletral.toFixed(2) ?? "0"}%</h1>
+                  
+                   <p>Collateral Ratio</p>
+                
                   <div className="spacer-20"></div>
                   <div className="progress-bar1">
                     <ProgressBar now={percentagebar ? percentagebar : 0} />
                   </div>
                   <div className="progress-lenght text-left w-100">
+                    
+                    <div className="EtcBalance">
                     <p>
                       {percentagebar
                         ? parseFloat(percentagebar).toFixed(2)
                         : "0"}
                       %
                     </p>
+                <div className="info">
+                <div className="inner-info">
+                <img src={info} alt="pic" />
+                      <div className="title-info-bar">Bar will be activated if the ratio drops down to 150% </div>
+                </div>
+              </div>
+              </div>
+
+                    
                   </div>
                 </div>
               </Col>
