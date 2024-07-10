@@ -10,8 +10,9 @@ import { liquidation_abi } from "./liquidation";
 import { TransactionHistoryAbi } from "./TransactionHistory_abi"
 import { oracle_Abi } from "./oracle_abi"
 import { apy_api } from "./apy_abi";
-import { Base_Url } from "../../Const/const";
+import addresses, { Base_Url, GAS_LIMIT, SOME_VALUE, convertEtherToWei } from "../../Const/const";
 import axios from "axios";
+import { ApyMapper } from "./ApyMapper";
 
 
 
@@ -103,6 +104,22 @@ export const minCollateralRatio = async (tokenaddress) => {
     throw error;
   }
 };
+export const getliquidationPenalty = async (tokenaddress) => {
+  const provider = await detectEthereumProvider();
+  const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
+
+  const signer = web3Provider.getSigner();
+
+  const contract = new ethers.Contract(addresses.Liquidation, liquidation_abi, signer);
+
+  try {
+    const result = await contract.liquidationPenalty();
+    await result;
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 export const APYFee = async (tokenaddress) => {
   const provider = await detectEthereumProvider();
   const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
@@ -113,6 +130,22 @@ export const APYFee = async (tokenaddress) => {
 
   try {
     const result = await contract.APYPercentage();
+    await result;
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+export const LatestAPYFee = async (tokenaddress) => {
+  const provider = await detectEthereumProvider();
+  const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
+
+  const signer = web3Provider.getSigner();
+
+  const contract = new ethers.Contract(addresses.ApyMapper, ApyMapper, signer);
+  try {
+    const result = await contract.getLatestAPYContractDetail();
+
     await result;
     return result;
   } catch (error) {
@@ -130,6 +163,23 @@ export const getbalanceOf = async (ERUSDToken, address) => {
     const signer = web3Provider.getSigner();
     const contract = new ethers.Contract(ERUSDToken, token_abi, signer);
     const result = await contract.balanceOf(address);
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getbalanceOfERUSD = async (ERUSDToken, address) => {
+
+  try {
+    const provider = await detectEthereumProvider();
+    if (!provider) {
+      throw new Error('Ethereum provider not found.');
+    }
+    const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
+    const signer = web3Provider.getSigner();
+    const contract = new ethers.Contract(ERUSDToken, vault_abi, signer);
+    const result = await contract.ERUSD(address);
 
     return result;
   } catch (error) {
@@ -245,9 +295,11 @@ export const switchingToRLC = async () => {
       }
     }
   }
+
 }
-export const lockAndDraw = async (constraceAddress, erusd, collatrael, AmountPayable) => {
-  // const Amount =AmountPayable+0000.1.toString();
+
+
+export const lockAndDraw = async (constraceAddress, erusd, collatrael, AmountPayable, tokenaddress) => {
   const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) {
     window.web3 = new Web3(provider);
@@ -259,25 +311,47 @@ export const lockAndDraw = async (constraceAddress, erusd, collatrael, AmountPay
     axios.post(`${Base_Url}UpdateContract`)
     .then(response => {
       if (response?.data?.Message === "successfully updated") {
+  setTimeout(() => {
         const provider1 = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider1.getSigner();
-        const contract = new ethers.Contract(constraceAddress, contract_api, signer);
         const web3 = new Web3(window.ethereum);
         const amountInWei = web3.utils.toWei(AmountPayable, 'ether');
-        // console.log("signing",erusd,collatrael,amountInWei)
-        contract.lockAndDraw(erusd, collatrael, {
-          value: amountInWei,
-          // gasLimit: 3000000,
-                      //  376601
-          
-        })
-        .then(async (res) => {
-          await res.wait(); 
-          resolve(res);
+
+        const contract = new ethers.Contract(constraceAddress, contract_api, signer);
+
+        const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
+        const contract2 = new ethers.Contract(constraceAddress, contract_api, signer);
+
+        contract2.getETHCalculatedAmount(erusd, collatrael)
+        .then(async (result) => {
+          const decimalResult = parseInt(result?._hex, 16);
+          const EthResult = decimalResult / 10 ** 18;
+          const ErusdFee = EthResult * 0.04;
+          const SumofErusd = EthResult + ErusdFee;
+          const finalresult= SumofErusd+SOME_VALUE
+          let amountInWei2 = parseInt(finalresult *1e18)
+          web3.utils.toWei(finalresult.toString(), 'ether');
+        //  
+          // console.log("344343", erusd, collatrael,amountInWei2.toString())
+                    const weiValue1 = convertEtherToWei(finalresult); 
+                    // console.log("object", weiValue1)
+
+          contract.lockAndDraw(erusd, collatrael, {
+            value: amountInWei2.toString(),
+            // gasLimit: GAS_LIMIT,
+          })
+          .then(async (res) => {
+            await res.wait();
+            resolve(res); 
+          })
+          .catch((error) => {
+            reject(error);
+          });
         })
         .catch((error) => {
           reject(error);
         });
+}, 15000)
       } else {
         reject(new Error("API response indicates failure"));
       }
@@ -287,6 +361,8 @@ export const lockAndDraw = async (constraceAddress, erusd, collatrael, AmountPay
     });
   });
 };
+
+
 export const withdrawCollateral = async (contractAddress, sellErusd) => {
   const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) {
@@ -302,7 +378,10 @@ export const withdrawCollateral = async (contractAddress, sellErusd) => {
                   const provider1 = new ethers.providers.Web3Provider(window.ethereum);
                   const signer = provider1.getSigner();
                   const contract = new ethers.Contract(contractAddress, contract_api, signer);
-                   contract.withdrawCollateral( 
+                   contract.withdrawCollateral(
+                     { 
+                      gasLimit: GAS_LIMIT,
+                   }
                    ).then(async (res) => {
                     await res.wait().then((x) => {
                           resolve(res);
@@ -371,8 +450,26 @@ export const liquidation_amount = async (liquidation, address) => {
     const signer = web3Provider.getSigner();
 
     const contract = new ethers.Contract(liquidation, liquidation_abi, signer);
-
+                                  
     const result = await contract.getLiquidationPercentage(address);
+    return result;
+  } catch (error) {
+
+  }
+}
+export const liquidation_amountLimit = async (liquidation, address) => {
+
+  try {
+    const provider = await detectEthereumProvider();
+    if (!provider) {
+      throw new Error('Ethereum provider not found.');
+    }
+    const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
+    const signer = web3Provider.getSigner();
+
+    const contract = new ethers.Contract(liquidation, liquidation_abi, signer);
+                                  
+    const result = await contract.getLiquidityLimit();
     return result;
   } catch (error) {
 
@@ -435,7 +532,7 @@ export const DEFAULT_COLLATERAL = async (vault, address) => {
     const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
     const signer = web3Provider.getSigner();
     const contract = new ethers.Contract(vault, vault_abi, signer);
-    const result = await contract.userUSDTAmount(address);
+    const result = await contract.eth(address);
     return result;
   } catch (error) {
 
@@ -453,6 +550,21 @@ export const APY_CALCULATE = async (apy, address) => {
     const signer = web3Provider.getSigner();
     const contract = new ethers.Contract(apy, apy_api, signer);
     const result = await contract.calculate(address);
+    return result;
+  } catch (error) {
+
+  }
+}
+export const UserAPY_CALCULATE = async (apy, address) => {
+  try {
+    const provider = await detectEthereumProvider();
+    if (!provider) {
+      throw new Error('Ethereum provider not found.');
+    }
+    const web3Provider = provider !== window.ethereum ? new ethers.providers.Web3Provider(provider) : new ethers.providers.Web3Provider(window.ethereum);
+    const signer = web3Provider.getSigner();
+    const contract = new ethers.Contract(apy, contract_api, signer);
+    const result = await contract.getUserTotalAPY(address);
     return result;
   } catch (error) {
 

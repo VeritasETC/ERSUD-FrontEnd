@@ -5,7 +5,7 @@ import NavBar from "./Components/NavBar";
 import Footer from "./Components/Footer";
 import Home from "./Pages/Home";
 import MyAssets from "./Pages/MyAssets";
-import { Usertransactionhistory, transactionhistorylenght, connectToMetamask, erusdAssest, ethAssest, liquidation_amount, getAmountpercentage } from "./utils/Web3/metamask";
+import { Usertransactionhistory, transactionhistorylenght, connectToMetamask, erusdAssest, ethAssest, liquidation_amount, getAmountpercentage, liquidation_amountLimit } from "./utils/Web3/metamask";
 import Web3 from "web3";
 import addresses, { Liquidation, TransactionHistory, getRate, oraclePrice, vault } from "./Const/const";
 import moment from "moment"
@@ -100,13 +100,24 @@ function Router() {
 
   const liquidationAssest = () => {
     liquidation_amount(addresses.Liquidation, address).then((x) => {
-      const limitResult = parseInt(x[1]?._hex, 16);
-      const colletralResult = parseInt(x[0]?._hex, 16);
-      setColletrallimit(limitResult)
-      setColletral(colletralResult)
+      // const limitResult = parseInt(x[1]?._hex, 16);
+      const colletralResult = parseInt(x?._hex, 16);
+      const finalresult= colletralResult / 10 ** 18
+      setColletral(finalresult)
+      
+      liquidation_amountLimit(addresses.Liquidation, address).then((limitX) => {
+        const limitFetchResult = parseInt(limitX?._hex, 16);
+        const finalLimit = limitFetchResult / 10 ** 18;
+        setColletrallimit(limitFetchResult)
+      }).catch((error) => {
+        console.error("Error fetching limit:", error);
+      });
+
+      
     }).catch(() => {
     })
   }
+
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -4,11 +4,12 @@ import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { MordorTestnet } from "@thirdweb-dev/chains";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { BinanceTestnet } from '@thirdweb-dev/chains';
  function App() {
   return (
     <>
       <ThirdwebProvider
-     activeChain={ MordorTestnet }
+     activeChain={BinanceTestnet }
     >
      <Layout />
     </ThirdwebProvider>

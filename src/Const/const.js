@@ -1,16 +1,37 @@
 import axios from "axios"
+import { ethers } from 'ethers';
+// testbuild
 
 const addresses = {
-  contractAddress: '0xeB3d48325149424b510515a997da703E8C493d0C',
-  TransactionHistory: '0xC24fE3134a55dFb4eA5e215654E7E807264C6Add',
-  APYContract: '0xF8C265B16A0d89f47d2e43EB23a0947d05B8409d',
-  vault: '0x3a88Fc7f1668682f4787018291B227890874AA32',
-  ERUSDToken: '0x36de70C38A9D70DF83667fDf7b47fA04D9AE5850',
-  ERUSDJoin: '0x84e889d3E79F8866B959E79924D1635239bC6832',
-  ETHJoin: '0x6078817196E60Df2188fb35ef1a8eE8Ac5c433eB',
-  oraclePrice: '0xff18b0C9546B588723a79d60A1853673cD3d13E4',
-  Liquidation: '0x23624AAE60E500074382433D285c765492F5c0BE'
+  contractAddress: '0x564acae285e9fdD6241e238A29398a95Ca79DcC2',
+  TransactionHistory: '0x60B09756412CeFABcBe2894e1455Fe25Fa5b3b31',
+  APYContract: '0xd0027BaF3D9A57f2f377F8280Fc1832e359c1C69',
+  vault: '0x8090d672aB88F9dC77EB3f36bFC7Fa82f17C5aF6',
+  ERUSDToken: '0xa640ABE09ACAdD71Ea580be4f2B6de46a5F45491',
+  ERUSDJoin: '0x892972117EBFA140cCbf8fBa726DCFcC7f2f9C69',
+  ETHJoin: '0xF63474e832d370a25a4b906dA293cD9a4887eC92',
+  oraclePrice: '0xc6a10392eF6b0d91A5e7aBEef16959c28e8EF5AC',
+  Liquidation: '0x7E39FD6891DE5bF92eE0778a549b5fc0f5Ad44Cc',
+  ApyMapper : '0xE77Eb3Dc0ba925f462BE880BF86BC6dBCCC6110E',
+  Swap:  '0x1A13A14C139D11a0B67cab4c8e02031F651f2616' 
+
 };
+// client  build
+// const addresses = {
+//   contractAddress: '0xEAEF128585cF2DB9E7000b741255899D2E6ce944',
+//   TransactionHistory: '0x0135c1df21FfE63F616b75011069E66da81Fd5Cd',
+//   APYContract: '0x9B6E0F4459f6a2240ef1bdAfcEb1E15050818DEB',
+//   vault: '0xf63eB45d48359D027482926ea25734CaBc1A7764',
+//   ERUSDToken: '0xa640ABE09ACAdD71Ea580be4f2B6de46a5F45491',
+//   ERUSDJoin: '0x01311e4C659f44190309C9333A738B11750B896e',
+//   ETHJoin: '0xf89AF5699bb2fEFD0c77e848D2522617d109F3d9',
+//   oraclePrice: '0x3f618A078C19A6e45cC71c57fF13bAE102BBFc20',
+//   Liquidation: '0x97C3E9cb7ed75Be9AF554995a4dCec46109f5728',
+//   ApyMapper : '0x77252B8de9C08900af6fA05852e324Da255947A6',
+//   Swap:  '0xC4242D8CA6706dd601d5b16D0C0e2fFedaA6303E' 
+
+// };
+
 
 export default addresses;
 
@@ -20,8 +41,8 @@ export const Telegram = "https://t.me/VeritasEcosytem"
 export const Github = "https://github.com/VeritasETC"
 export const Linkedin = "https://www.linkedin.com/company/92883666/admin/feed/posts/"
 export const Medium = "https://medium.com/@Veritas_ETC"
-export const ChainIds = 63
-export const pdfUrlwhitePaper = "ERUSD_Whitepaper_1.0.pdf";
+export const ChainIds = 97
+export const pdfUrlwhitePaper = "ERUSD_Whitepaper.pdf";
 export const minutesToMilliseconds =  60000; // 1 minute = 60000 milliseconds
 // export const Base_Url = "https://veritas-dao-be.ammag.tech/";
 export const Base_Url = "https://veritas-dao-be.erusd.io/";
@@ -39,6 +60,58 @@ export const getRate = async () => {
     }
   });
   };
+  export const convertEtherToWei = (etherValue) => {
+    try {
+      const roundedEtherValue = parseFloat(etherValue).toFixed(18);
+      return ethers.utils.parseEther(roundedEtherValue.toString()).toString();
+    } catch (error) {
+      console.error('Invalid Ether value', error);
+      return 'Error';
+    }
+  };
+  
   export const colletralratiovalue= 150
   export const PRECISION = 6;
   export const SOME_VALUE = 0.0000002;
+  export const GAS_LIMIT = 620000;
+export const SOME_VALUES="0.00"
+export const EmptyValue=0.000000
+ export const DocFile = "ERUSD_Whitepaper.pdf";
+
+export const copyIconSVG = `
+<g fill="none" fillRule="evenodd">
+  <polygon fill="#CDBDB2" points="60.75 173.25 88.313 180.563 88.313 171 90.563 168.75 106.313 168.75 106.313 180 106.313 187.875 89.438 187.875 68.625 178.875"></polygon>
+  <polygon fill="#CDBDB2" points="105.75 173.25 132.75 180.563 132.75 171 135 168.75 150.75 168.75 150.75 180 150.75 187.875 133.875 187.875 113.063 178.875" transform="matrix(-1 0 0 1 256.5 0)"></polygon>
+  <polygon fill="#393939" points="90.563 152.438 88.313 171 91.125 168.75 120.375 168.75 123.75 171 121.5 152.438 117 149.625 94.5 150.188"></polygon>
+  <polygon fill="#F89C35" points="75.375 27 88.875 58.5 95.063 150.188 117 150.188 123.75 58.5 136.125 27"></polygon>
+  <polygon fill="#F89D35" points="16.313 96.188 .563 141.75 39.938 139.5 65.25 139.5 65.25 119.813 64.125 79.313 58.5 83.813"></polygon>
+  <polygon fill="#D87C30" points="46.125 101.25 92.25 102.375 87.188 126 65.25 120.375"></polygon>
+  <polygon fill="#EA8D3A" points="46.125 101.813 65.25 119.813 65.25 137.813"></polygon>
+  <polygon fill="#F89D35" points="65.25 120.375 87.75 126 95.063 150.188 90 153 65.25 138.375"></polygon>
+  <polygon fill="#EB8F35" points="65.25 138.375 60.75 173.25 90.563 152.438"></polygon>
+  <polygon fill="#EA8E3A" points="92.25 102.375 95.063 150.188 86.625 125.719"></polygon>
+  <polygon fill="#D87C30" points="39.375 138.938 65.25 138.375 60.75 173.25"></polygon>
+  <polygon fill="#EB8F35" points="12.938 188.438 60.75 173.25 39.375 138.938 .563 141.75"></polygon>
+  <polygon fill="#E8821E" points="88.875 58.5 64.688 78.75 46.125 101.25 92.25 102.938"></polygon>
+  <polygon fill="#DFCEC3" points="60.75 173.25 90.563 152.438 88.313 170.438 88.313 180.563 68.063 176.625"></polygon>
+  <polygon fill="#DFCEC3" points="121.5 173.25 150.75 152.438 148.5 170.438 148.5 180.563 128.25 176.625" transform="matrix(-1 0 0 1 272.25 0)"></polygon>
+  <polygon fill="#393939" points="70.313 112.5 64.125 125.438 86.063 119.813" transform="matrix(-1 0 0 1 150.188 0)"></polygon>
+  <polygon fill="#E88F35" points="12.375 .563 88.875 58.5 75.938 27"></polygon>
+  <path fill="#8E5A30" d="M12.3750002,0.562500008 L2.25000003,31.5000005 L7.87500012,65.250001 L3.93750006,67.500001 L9.56250014,72.5625 L5.06250008,76.5000011 L11.25,82.1250012 L7.31250011,85.5000013 L16.3125002,96.7500014 L58.5000009,83.8125012 C79.1250012,67.3125004 89.2500013,58.8750003 88.8750013,58.5000009 C88.5000013,58.1250009 63.0000009,38.8125006 12.3750002,0.562500008 Z"></path>
+  <g transform="matrix(-1 0 0 1 211.5 0)">
+    <polygon fill="#F89D35" points="16.313 96.188 .563 141.75 39.938 139.5 65.25 139.5 65.25 119.813 64.125 79.313 58.5 83.813"></polygon>
+    <polygon fill="#D87C30" points="46.125 101.25 92.25 102.375 87.188 126 65.25 120.375"></polygon>
+    <polygon fill="#EA8D3A" points="46.125 101.813 65.25 119.813 65.25 137.813"></polygon>
+    <polygon fill="#F89D35" points="65.25 120.375 87.75 126 95.063 150.188 90 153 65.25 138.375"></polygon>
+    <polygon fill="#EB8F35" points="65.25 138.375 60.75 173.25 90 153"></polygon>
+    <polygon fill="#EA8E3A" points="92.25 102.375 95.063 150.188 86.625 125.719"></polygon>
+    <polygon fill="#D87C30" points="39.375 138.938 65.25 138.375 60.75 173.25"></polygon>
+    <polygon fill="#EB8F35" points="12.938 188.438 60.75 173.25 39.375 138.938 .563 141.75"></polygon>
+    <polygon fill="#E8821E" points="88.875 58.5 64.688 78.75 46.125 101.25 92.25 102.938"></polygon>
+    <polygon fill="#393939" points="70.313 112.5 64.125 125.438 86.063 119.813" transform="matrix(-1 0 0 1 150.188 0)"></polygon>
+    <polygon fill="#E88F35" points="12.375 .563 88.875 58.5 75.938 27"></polygon>
+    <path fill="#8E5A30" d="M12.3750002,0.562500008 L2.25000003,31.5000005 L7.87500012,65.250001 L3.93750006,67.500001 L9.56250014,72.5625 L5.06250008,76.5000011 L11.25,82.1250012 L7.31250011,85.5000013 L16.3125002,96.7500014 L58.5000009,83.8125012 C79.1250012,67.3125004 89.2500013,58.8750003 88.8750013,58.5000009 C88.5000013,58.1250009 63.0000009,38.8125006 12.3750002,0.562500008 Z"></path>
+  </g>
+</g>
+`;
+
